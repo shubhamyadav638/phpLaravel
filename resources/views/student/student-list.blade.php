@@ -1,7 +1,7 @@
 @extends('layout.admin')
 
 @section('contents')
-  <main id="main" class="main">
+ <main id="main" class="main">
     <div class="pagetitle">
       <h1>Students Data Tables</h1>
       <nav>
@@ -25,41 +25,20 @@
             </button>
             </div>
               <!-- Table with stripped rows -->
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th>S No.</th>
-                    <th>
-                      <b>N</b>ame
-                    </th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Aadhaar</th>
-                    <th>Address</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  $i=1;
 
-                  ?>
-                  @foreach($students as $student)
-                  <tr>
-                    <td>{{$i++}}</td>
-                    <td>{{$student->name}}</td>
-                    <td>{{$student->email}}</td>
-                    <td>{{$student->phone}}</td>
-                    <td>{{$student->aadhaar}}</td>
-                    <td>{{$student->address}}</td>
-                    <td>
-                      <a  onclick="editStudent({{$student->id}})" class="btn btn-sm btn-primary">Edit</a>
-                      <a class="btn btn-sm btn-danger"onclick="deleteStudent({{$student->id}})" >Delete</a>
-                    </td>
-                  </tr>
-                  @endforeach
-                </tbody>
-              </table>
+              <table class="table table-bordered" id="students-table">
+                    <thead>
+                        <tr>
+                            <th>S No.</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Aadhaar</th>
+                            <th>Address</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
               <!-- End Table with stripped rows -->
             </div>
           </div>
@@ -75,10 +54,54 @@
 
   </main>
 
-  @endsection
-  @section('script')
-  <script>
-    function addStudent(){
+
+@endsection
+
+
+@section('script')
+<script>
+
+$(function() {
+    $('#students-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ url('/student-list') }}",
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'name', name: 'name' },
+            { data: 'email', name: 'email' },
+            { data: 'phone', name: 'phone' },
+            { data: 'aadhaar', name: 'aadhaar' },
+            { data: 'address', name: 'address' },
+            { data: 'action', name: 'action', orderable: false, searchable: false }
+        ],
+        dom: 'Bfrtip', // Required for buttons
+        buttons: [
+            // {
+            //     text: 'Add',
+            //     action: function ( e, dt, node, config ) {
+            //         addStudent(); //add student button
+            //     }
+            // },
+            'excel', 'csv', 'pdf', 'print',
+            {
+                text: 'Reload', // add reload btn
+                action: function ( e, dt, node, config ) {
+                    dt.ajax.reload();
+                }
+            },
+            {
+                text: 'Reset',
+                action: function ( e, dt, node, config ) {
+                    dt.search('').columns().search('').draw();
+                }
+            }
+        ]
+    });
+});
+
+
+function addStudent(){
         var url = "{{url('add-student-form')}}"
         $.ajax({
           type:'get',
@@ -95,7 +118,7 @@
       });
     }
 
-function editStudent(id){
+    function editStudent(id){
         var url = "{{url('edit-student-form')}}/"+id;
         $.ajax({
           type:'get',
@@ -112,7 +135,7 @@ function editStudent(id){
       });
     }
 
-function deleteStudent(id){
+    function deleteStudent(id){
         var url = "{{url('delete-form-Data')}}/"+id;
         $.ajax({
           type:'get',
@@ -127,6 +150,5 @@ function deleteStudent(id){
           }
       });
     }
-
-  </script>
-  @endsection
+</script>
+@endsection

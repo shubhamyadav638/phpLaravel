@@ -1,3 +1,4 @@
+
 <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
@@ -8,13 +9,34 @@
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
+
       <li class="nav-item">
-        <a class="nav-link " href="{{url('/studentList')}}">
-          <i class="bi bi-grid"></i>
-          <span>Students</span>
+        <a class="nav-link collapsed" data-bs-target="#tables-std" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Students</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
+        <ul id="tables-std" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{{url('/student-list')}}">
+              <i class="bi bi-circle"></i><span>Student List</span>
+            </a>
+          </li>
+          
+        </ul>
       </li>
 
+<li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>Teachers</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{{url('/teacher-list-form')}}">
+              <i class="bi bi-circle"></i><span>Teacher List</span>
+            </a>
+          </li>
+          
+        </ul>
+      </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="{{url('/register')}}">
